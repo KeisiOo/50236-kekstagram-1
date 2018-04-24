@@ -59,12 +59,9 @@ var fragment = document.createDocumentFragment();
 for (var i = 0; i < photos.length; i++) {
   fragment.appendChild(showPictures(photos[i]));
 }
-
 pictures.appendChild(fragment);
 
 var bigPicture = document.querySelector('.big-picture');
-
-bigPicture.classList.remove('hidden');
 
 var bigPictureContent = function (num) {
   bigPicture.querySelector('img').src = photos[num].url;
@@ -76,7 +73,54 @@ var bigPictureContent = function (num) {
   socialComments.querySelector('.social__comment').insertAdjacentText('beforeend', photos[num].comments);
 };
 
-bigPictureContent(0);
-
 bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
 bigPicture.querySelector('.social__comment-loadmore').classList.add('visually-hidden');
+
+var openPicture = document.querySelectorAll('.picture__link');
+var closePicture = document.querySelector('.big-picture__cancel');
+
+for (var k = 0; k < openPicture.length; k++) {
+  openPicture[k].pictureIndex = k;
+  openPicture[k].addEventListener('click', function (evt) {
+    bigPicture.classList.remove('hidden');
+    bigPictureContent(evt.target.pictureIndex);
+  });
+}
+
+closePicture.addEventListener('click', function () {
+  bigPicture.classList.add('hidden');
+});
+
+var uploadFile = document.querySelector('#upload-file');
+var openUploadFile = document.querySelector('.img-upload__overlay');
+var closeUploadFile = document.querySelector('.img-upload__cancel');
+
+uploadFile.addEventListener('change', function () {
+  openUploadFile.classList.remove('hidden');
+});
+
+closeUploadFile.addEventListener('click', function () {
+  openUploadFile.classList.add('hidden');
+});
+
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+var effectsToggle = document.querySelectorAll('.effects__radio');
+
+var effects = [
+  'effects__preview--none',
+  'effects__preview--chrome',
+  'effects__preview--sepia',
+  'effects__preview--marvin',
+  'effects__preview--phobos',
+  'effects__preview--heat'
+];
+
+for (var l = 0; l < effectsToggle.length; l++) {
+  effectsToggle[l].effectIndex = l;
+  effectsToggle[l].addEventListener('click', function (evt) {
+    imgUploadPreview.classList.add(effects[evt.target.effectIndex]);
+    imgUploadPreview.classList.remove(effects[evt.target.effectIndex - 1]);
+    imgUploadPreview.classList.remove(effects[evt.target.effectIndex + 1]);
+  });
+}
+
